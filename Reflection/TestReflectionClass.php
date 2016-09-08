@@ -244,7 +244,7 @@ class TestReflectionClass extends PHPUnit_Framework_TestCase{
         $this->assertFalse($test->isTrait());
         $this->assertFalse($test->isAbstract());
         //PHP7之前不存在匿名类
-        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
+        if (version_compare(PHP_VERSION, '7.0.0', '>')) {
             $this->assertFalse($test->isAnonymous());
         }
     }

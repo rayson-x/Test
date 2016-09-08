@@ -5,7 +5,7 @@ namespace Reflection\Test;
  * Class demo
  * @demo this is class demo
  */
-class demo{
+class demo extends parentClass{
     const NAME = 'test';
     const TYPE = 'object';
 
@@ -19,7 +19,7 @@ class demo{
 
     protected $null;
 
-    public function __construct(test $test)
+    public function __construct(test $test,array &$array = [],string $name = demo::NAME)
     {
         $this->obj = $test;
     }
