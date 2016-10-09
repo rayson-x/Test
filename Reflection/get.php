@@ -1,5 +1,5 @@
 <?php
-namespace Reflection\Test;
+namespace Reflection;
 
 interface get{
     public function get($name);

@@ -1,5 +1,5 @@
 <?php
-namespace Reflection\Test;
+namespace Reflection;
 
 final class test extends parentClass implements set,get{
     use traitClass;

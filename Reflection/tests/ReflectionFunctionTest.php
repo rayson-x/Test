@@ -1,12 +1,12 @@
 <?php
 /**
  * @route Class\Method
- * @param \Reflection\Test\test $a
+ * @param \Reflection\test $a
  * @param array $b
  * @param $c
  * @param null $d
  */
-function test(Reflection\Test\test $a,array $b,$c,$d = null){
+function test(Reflection\test $a,array $b,$c,$d = null){
 
 };
 

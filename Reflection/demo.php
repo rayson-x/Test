@@ -1,5 +1,5 @@
 <?php
-namespace Reflection\Test;
+namespace Reflection;
 
 /**
  * Class demo

@@ -7,11 +7,11 @@
 class TestReflectionClass extends PHPUnit_Framework_TestCase{
 
     public function testClassTest(){
-        return new \ReflectionClass('Reflection\Test\test');
+        return new \ReflectionClass('Reflection\test');
     }
 
     public function testClassDemo(){
-        return new \ReflectionClass('Reflection\Test\demo');
+        return new \ReflectionClass('Reflection\demo');
     }
 
     public function testClassIterator(){
@@ -26,7 +26,7 @@ class TestReflectionClass extends PHPUnit_Framework_TestCase{
      */
     public function testClassName($instances)
     {
-        $this->assertEquals('Reflection\Test\demo', $instances->getName());
+        $this->assertEquals('Reflection\demo', $instances->getName());
     }
 
     /**
@@ -82,7 +82,7 @@ class TestReflectionClass extends PHPUnit_Framework_TestCase{
         $this->assertTrue($demo->hasProperty('string'));
         $this->assertFalse($demo->hasProperty('str'));
 
-        $this->assertEquals('stringValue',$test->getProperty('string')->getValue(new Reflection\Test\test()));
+        $this->assertEquals('stringValue',$test->getProperty('string')->getValue(new Reflection\test()));
         $this->assertEquals('staticStringValue',$test->getProperty('staticString')->getValue());
 
         foreach($demo->getProperties(ReflectionProperty::IS_PROTECTED) as $property){
@@ -144,7 +144,7 @@ class TestReflectionClass extends PHPUnit_Framework_TestCase{
     public function testClassFileName($iterator,$demo){
         $this->assertFalse($iterator->getFileName());
 
-        $path = __DIR__.DIRECTORY_SEPARATOR.'Test'.DIRECTORY_SEPARATOR.'demo.php';
+        $path = dirname(__DIR__).DIRECTORY_SEPARATOR.'demo.php';
         $this->assertEquals($path,$demo->getFileName());
     }
 
@@ -156,12 +156,12 @@ class TestReflectionClass extends PHPUnit_Framework_TestCase{
      */
     public function testClassExtendsAndImplementsInterface($test){
         /* 继承的父类 */
-        $this->assertEquals(Reflection\Test\parentClass::class,$test->getParentClass()->getName());
+        $this->assertEquals(Reflection\parentClass::class,$test->getParentClass()->getName());
 
         /* 类实现的接口 */
         $interfaces = [
-            Reflection\Test\set::class,
-            Reflection\Test\get::class
+            Reflection\set::class,
+            Reflection\get::class
         ];
 
         $this->assertEquals($interfaces,$test->getInterfaceNames());
@@ -172,14 +172,14 @@ class TestReflectionClass extends PHPUnit_Framework_TestCase{
             next($interfaces);
         }
 
-        $this->assertTrue($test->implementsInterface(Reflection\Test\set::class));
+        $this->assertTrue($test->implementsInterface(Reflection\set::class));
 
         /* 类继承的trait */
-        $this->assertEquals([Reflection\Test\traitClass::class],$test->getTraitNames());
+        $this->assertEquals([Reflection\traitClass::class],$test->getTraitNames());
 
         foreach($test->getTraits() as $trait){
             $this->assertInstanceOf(ReflectionClass::class,$trait);
-            $this->assertEquals(Reflection\Test\traitClass::class,$trait->getName());
+            $this->assertEquals(Reflection\traitClass::class,$trait->getName());
         }
     }
 
@@ -226,9 +226,9 @@ class TestReflectionClass extends PHPUnit_Framework_TestCase{
      */
     public function testClassModifiers($test){
         /* 类是否为指定类的子类，或者实现了指定的接口 */
-        $this->assertTrue($test->isSubclassOf(\Reflection\Test\set::class));
-        $this->assertTrue($test->isSubclassOf(\Reflection\Test\get::class));
-        $this->assertTrue($test->isSubclassOf(\Reflection\Test\parentClass::class));
+        $this->assertTrue($test->isSubclassOf(\Reflection\set::class));
+        $this->assertTrue($test->isSubclassOf(\Reflection\get::class));
+        $this->assertTrue($test->isSubclassOf(\Reflection\parentClass::class));
 
         /* 类可执行操作 */
         $this->assertFalse($test->isCloneable());
@@ -257,7 +257,7 @@ class TestReflectionClass extends PHPUnit_Framework_TestCase{
      */
     public function testClassNamespaceName($demo){
         $this->assertTrue($demo->inNamespace());
-        $this->assertEquals('Reflection\Test',$demo->getNamespaceName());
+        $this->assertEquals('Reflection',$demo->getNamespaceName());
         $this->assertEquals('demo',$demo->getShortName());
     }
 
@@ -270,15 +270,15 @@ class TestReflectionClass extends PHPUnit_Framework_TestCase{
      * @param $demo ReflectionClass
      */
     public function testClassInstance($test,$demo){
-        $testInstance = new Reflection\Test\test();
+        $testInstance = new Reflection\test();
         $this->assertTrue($test->isInstance($testInstance));
 
         $this->assertTrue($demo->isInstantiable());
         /* 实例一个类 类似 call_user_func*/
-        $this->assertInstanceOf(Reflection\Test\demo::class,$demo->newInstance($testInstance));
+        $this->assertInstanceOf(Reflection\demo::class,$demo->newInstance($testInstance));
         /* 通过一个参数数组实例一个类 类似 call_user_func_array */
-        $this->assertInstanceOf(Reflection\Test\demo::class,$demo->newInstanceArgs([$testInstance]));
+        $this->assertInstanceOf(Reflection\demo::class,$demo->newInstanceArgs([$testInstance]));
         /* 绕过构造函数实例一个类 */
-        $this->assertInstanceOf(Reflection\Test\demo::class,$demo->newInstanceWithoutConstructor());
+        $this->assertInstanceOf(Reflection\demo::class,$demo->newInstanceWithoutConstructor());
     }
 }

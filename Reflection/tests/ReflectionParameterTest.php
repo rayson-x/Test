@@ -1,70 +1,54 @@
 <?php
 function testReflectionParameter($testString){
-
 }
-
 class TestReflectionParameter extends PHPUnit_Framework_TestCase{
-
     public function testClassDemoConstructParameters(){
-        $demo = new ReflectionClass(Reflection\Test\demo::class);
-
+        $demo = new ReflectionClass(Reflection\demo::class);
         $constructMethod = $demo->getConstructor();
-
         return ($constructMethod->getParameters());
     }
-
     public function testClassDemoTestMethodParameters(){
-        $demo = new ReflectionClass(Reflection\Test\demo::class);
-
+        $demo = new ReflectionClass(Reflection\demo::class);
         $constructMethod = $demo->getMethod('test');
-
         return ($constructMethod->getParameters());
     }
-
     public function testFunctionParameters(){
         $Function = new ReflectionFunction('testReflectionParameter');
-
         return ($Function->getParameters());
     }
-
     /**
-     * ²âÊÔ²ÎÊýÀàÐÍ
+     * æµ‹è¯•å‚æ•°ç±»åž‹
      *
      * @depends testClassDemoConstructParameters
      * @param $params array
      */
     public function testParameterType($params){
-        /* »ñÈ¡²ÎÊýÀàÐÍ */
+        /* èŽ·å–å‚æ•°ç±»åž‹ */
         foreach($params as $param){
             if($param instanceof ReflectionParameter){
-                /* ¼ì²é²ÎÊýÀàÐÍÊÇ·ñÎª¿Õ */
+                /* æ£€æŸ¥å‚æ•°ç±»åž‹æ˜¯å¦ä¸ºç©º */
                 $this->assertFalse($param->allowsNull());
-
-                //PHP7Ìí¼Ó·´Éä²ÎÊýÀàÐÍÀà
+                //PHP7æ·»åŠ åå°„å‚æ•°ç±»åž‹ç±»
                 if (version_compare(PHP_VERSION, '7.0.0', '>')) {
-                    /* ¼ì²éÊÇ·ñ¶¨Òå²ÎÊýÀàÐÍ */
-                    /* Èç¹û²ÎÊýÎªÒ»¸öÀàµÄÊµÀý,ÄÇÃ´²ÎÊýÀàÐÍ¾ÍÊÇÄÇ¸öÀàµÄÃû³Æ */
+                    /* æ£€æŸ¥æ˜¯å¦å®šä¹‰å‚æ•°ç±»åž‹ */
+                    /* å¦‚æžœå‚æ•°ä¸ºä¸€ä¸ªç±»çš„å®žä¾‹,é‚£ä¹ˆå‚æ•°ç±»åž‹å°±æ˜¯é‚£ä¸ªç±»çš„åç§° */
                     $this->assertTrue($param->hasType());
-                    $this->assertTrue(in_array((string)$param->getType(),['string','array','Reflection\Test\test']));
+                    $this->assertTrue(in_array((string)$param->getType(),['string','array','Reflection\test']));
                 }
             }
         }
         list($test,$array,$name) = $params;
-
-        /* ´«ÈëÀàÐÍÊÇ·ñÎªÊý×é */
+        /* ä¼ å…¥ç±»åž‹æ˜¯å¦ä¸ºæ•°ç»„ */
         $this->assertFalse($test->isArray());
         $this->assertTrue($array->isArray());
         $this->assertFalse($name->isArray());
-
-        /* ´«ÈëÀàÐÍÊÇ·ñÎª¿É»Øµ÷½á¹¹ */
+        /* ä¼ å…¥ç±»åž‹æ˜¯å¦ä¸ºå¯å›žè°ƒç»“æž„ */
         $this->assertFalse($test->isCallable());
         $this->assertFalse($array->isCallable());
         $this->assertFalse($name->isCallable());
     }
-
-
     /**
-     * ²âÊÔ¶à¸ö²»Í¬×÷ÓÃÓò,²»Í¬²ÎÊýÐèÇóµÄ·½·¨
+     * æµ‹è¯•å¤šä¸ªä¸åŒä½œç”¨åŸŸ,ä¸åŒå‚æ•°éœ€æ±‚çš„æ–¹æ³•
      *
      * @depends testClassDemoConstructParameters
      * @depends testClassDemoTestMethodParameters
@@ -74,81 +58,69 @@ class TestReflectionParameter extends PHPUnit_Framework_TestCase{
      * @param $functionParams array
      */
     public function testParametersInfo($constructParams,$testMethodParams,$functionParams){
-        ///////////////////////²âÊÔDemoÀà¸¸ÀàµÄtest·½·¨///////////////////////
+        ///////////////////////æµ‹è¯•Demoç±»çˆ¶ç±»çš„testæ–¹æ³•///////////////////////
         foreach($testMethodParams as $testMethodParam){
-            /* »ñÈ¡ÉùÃ÷Àà */
+            /* èŽ·å–å£°æ˜Žç±» */
             $this->assertInstanceOf(ReflectionClass::class,$testMethodParam->getDeclaringClass());
-            $this->assertEquals('Reflection\Test\parentClass',$testMethodParam->getDeclaringClass()->getName());
-
-            /* »ñÈ¡ÉùÃ÷º¯Êý */
+            $this->assertEquals('Reflection\parentClass',$testMethodParam->getDeclaringClass()->getName());
+            /* èŽ·å–å£°æ˜Žå‡½æ•° */
             $this->assertInstanceOf(ReflectionMethod::class,$testMethodParam->getDeclaringFunction());
             $this->assertEquals('test',$testMethodParam->getDeclaringFunction()->getName());
         }
-
-        ///////////////////////²âÊÔtestReflectionParameter·½·¨///////////////////////
+        ///////////////////////æµ‹è¯•testReflectionParameteræ–¹æ³•///////////////////////
         foreach($functionParams as $functionParam){
-            /* »ñÈ¡ÉùÃ÷Àà */
+            /* èŽ·å–å£°æ˜Žç±» */
             $this->assertNull($functionParam->getDeclaringClass());
-
-            /* »ñÈ¡ÉùÃ÷º¯Êý */
+            /* èŽ·å–å£°æ˜Žå‡½æ•° */
             $this->assertInstanceOf(ReflectionFunction::class,$functionParam->getDeclaringFunction());
             $this->assertEquals('testReflectionParameter',$functionParam->getDeclaringFunction()->getName());
         }
-
-        ///////////////////////²âÊÔDemoÀàµÄ¹¹Ôìº¯Êý///////////////////////
+        ///////////////////////æµ‹è¯•Demoç±»çš„æž„é€ å‡½æ•°///////////////////////
         foreach($constructParams as $constructParam){
-            /* »ñÈ¡ÉùÃ÷Àà */
+            /* èŽ·å–å£°æ˜Žç±» */
             $this->assertInstanceOf(ReflectionClass::class,$constructParam->getDeclaringClass());
-            $this->assertEquals('Reflection\Test\demo',$constructParam->getDeclaringClass()->getName());
-
-            /* »ñÈ¡ÉùÃ÷º¯Êý */
+            $this->assertEquals('Reflection\demo',$constructParam->getDeclaringClass()->getName());
+            /* èŽ·å–å£°æ˜Žå‡½æ•° */
             $this->assertInstanceOf(ReflectionMethod::class,$constructParam->getDeclaringFunction());
             $this->assertEquals('__construct',$constructParam->getDeclaringFunction()->getName());
-
-            /* Èç¹ûÎª¿ÉÑ¡²ÎÊý,»ñÈ¡ÆäÄ¬ÈÏÖµ */
+            /* å¦‚æžœä¸ºå¯é€‰å‚æ•°,èŽ·å–å…¶é»˜è®¤å€¼ */
             if($constructParam->isDefaultValueAvailable()){
                 $this->assertTrue(in_array($constructParam->getDefaultValue(),[[],'test']));
             }
-
-            /* »ñÈ¡·½·¨ËùÒÀÀµµÄÀà */
+            /* èŽ·å–æ–¹æ³•æ‰€ä¾èµ–çš„ç±» */
             if (version_compare(PHP_VERSION, '7.0.0', '>')) {
-                //PHP7Ö§³ÖµÄ·½·¨
+                //PHP7æ”¯æŒçš„æ–¹æ³•
                 if($constructParam->hasType() && $constructParam->getClass()){
                     $this->assertInstanceOf(ReflectionClass::class,$constructParam->getClass());
-                    $this->assertEquals(Reflection\Test\test::class,$constructParam->getClass()->getName());
+                    $this->assertEquals(Reflection\test::class,$constructParam->getClass()->getName());
                 }
             }else{
-                //ÏòÀÏ°æ±¾¼æÈÝµÄ·½·¨
+                //å‘è€ç‰ˆæœ¬å…¼å®¹çš„æ–¹æ³•
                 if(!$constructParam->allowsNull() && $constructParam->getClass()){
                     $this->assertInstanceOf(ReflectionClass::class,$constructParam->getClass());
-                    $this->assertEquals(Reflection\Test\test::class,$constructParam->getClass()->getName());
+                    $this->assertEquals(Reflection\test::class,$constructParam->getClass()->getName());
                 }
             }
         }
-
         list($test,$array,$name) = $constructParams;
-        /* ¼ì²é²ÎÊýÊÇ·ñ¿ÉÑ¡ */
+        /* æ£€æŸ¥å‚æ•°æ˜¯å¦å¯é€‰ */
         $this->assertFalse($test->isOptional());
         $this->assertTrue($array->isOptional());
         $this->assertTrue($name->isOptional());
-
-        /* ¼ì²éÊÇ·ñÍ¨¹ýÒýÓÃ */
+        /* æ£€æŸ¥æ˜¯å¦é€šè¿‡å¼•ç”¨ */
         $this->assertFalse($test->isPassedByReference());
         $this->assertTrue($array->isPassedByReference ());
         $this->assertFalse($name->isPassedByReference ());
-
-        /* ¼ì²é²ÎÊýÄ¬ÈÏÖµÊÇ·ñ¿ÉÓÃ */
+        /* æ£€æŸ¥å‚æ•°é»˜è®¤å€¼æ˜¯å¦å¯ç”¨ */
         $this->assertFalse($test->isDefaultValueAvailable());
         $this->assertTrue($array->isDefaultValueAvailable());
         $this->assertTrue($name->isDefaultValueAvailable());
-
-        /* »ñÈ¡²ÎÊýÎ»ÖÃ */
+        /* èŽ·å–å‚æ•°ä½ç½® */
         $this->assertEquals(0,$test->getPosition());
         $this->assertEquals(1,$array->getPosition());
         $this->assertEquals(2,$name->getPosition());
-
-        /* ¼ì²éÄ¬ÈÏÖµÊÇ²»ÊÇ³£Á¿ */
-        /* Èç¹ûÃ»ÓÐ²ÎÊýÄ¬ÈÏÖµ²»ÊÇ³£Á¿,µ÷ÓÃ´Ë·½·¨»áÅ×³öÒ»¸öÒì³£ */
+        /* æ£€æŸ¥é»˜è®¤å€¼æ˜¯ä¸æ˜¯å¸¸é‡ */
+        /* å¦‚æžœæ²¡æœ‰å‚æ•°é»˜è®¤å€¼ä¸æ˜¯å¸¸é‡,è°ƒç”¨æ­¤æ–¹æ³•ä¼šæŠ›å‡ºä¸€ä¸ªå¼‚å¸¸ */
         $this->assertTrue($name->isDefaultValueConstant());
     }
 }
